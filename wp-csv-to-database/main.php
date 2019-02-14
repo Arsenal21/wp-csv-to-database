@@ -9,6 +9,9 @@
  * Author URI: https://www.tipsandtricks-hq.com
  * License: GPL2
  */
+
+//Slug - wpcsvdb
+
 class wp_csv_to_db {
 
     // Setup options variables
@@ -332,13 +335,52 @@ class wp_csv_to_db {
 	    echo '</div>';
 	}
 	?>
-	<div class="wrap">
+        
+    <div class="wrap">
 
+    <style>
+    div.wpcsvdb-settings-grid {
+    display: inline-block;
+    }
+    div.wpcsvdb-main-cont {
+    width: 80%;
+    }
+    div.wpcsvdb-sidebar-cont {
+    width: 19%;
+    float: right;
+    }
+    div#poststuff {
+    min-width: 19%;
+    }
+    .wpcsvdb-stars-container {
+    text-align: center;
+    margin-top: 10px;
+    }
+    .wpcsvdb-stars-container span {
+    vertical-align: text-top;
+    color: #ffb900;
+    }
+    .wpcsvdb-stars-container a {
+    text-decoration: none;
+    }
+    @media (max-width: 782px) {
+    div.wpcsvdb-settings-grid {
+        display: block;
+        float: none;
+        width: 100%;
+    }
+    }
+    </style>
+    
 	    <h2><?php _e( 'WordPress CSV to Database Options', 'wp_csv_to_db' ); ?></h2>
 
 	    <p>This plugin allows you to insert CSV file data into your WordPress database table. You can also export the content of a database using this plugin.</p>
-	    <p><a href="https://www.tipsandtricks-hq.com/wp-csv-to-database-plugin-import-excel-file-content-into-wordpress-database-2116" target="_blank">Visit the plugin page</a> for more details and usage instruction.</p>
-
+    
+            <p>
+                View <a href="https://www.tipsandtricks-hq.com/wp-csv-to-database-plugin-import-excel-file-content-into-wordpress-database-2116" target="_blank">plugin usage documentation</a>.
+            </p>
+            
+            <div class="wpcsvdb-settings-grid wpcsvdb-main-cont">
 	    <div id="tabs">
 		<ul>
 		    <li><a href="#tabs-1"><?php _e( 'Settings', 'wp_csv_to_db' ); ?></a></li>
@@ -504,7 +546,24 @@ class wp_csv_to_db {
 		    </form>
 		</div> <!-- End tab 4 -->
 	    </div> <!-- End #tabs -->
-	</div> <!-- End page wrap -->
+        </div> <!-- End .wpcsvdb-main-cont -->
+        
+        <div id="poststuff" class="wpcsvdb-settings-grid wpcsvdb-sidebar-cont">
+    	<div class="postbox" style="min-width: inherit;">
+    	    <h3 class="hndle"><label for="title"><?php _e( 'Plugin Documentation', 'wp-csv-to-db' ); ?></label></h3>
+    	    <div class="inside">
+		    <?php echo sprintf( __( 'Please read the <a target="_blank" href="%s">WP CSV to DB</a> plugin setup instructions and tutorials to learn how to configure and use it.', 'wp-csv-to-db' ), 'https://www.tipsandtricks-hq.com/wp-csv-to-database-plugin-import-excel-file-content-into-wordpress-database-2116' ); ?>
+    	    </div>
+    	</div>
+    	<div class="postbox" style="min-width: inherit;">
+    	    <h3 class="hndle"><label for="title"><?php _e( 'Our Other Plugins', 'wp-csv-to-db' ); ?></label></h3>
+    	    <div class="inside">
+		    <?php echo sprintf( __( 'Check out <a target="_blank" href="%s">our other plugins</a>', 'wp-csv-to-db' ), 'https://www.tipsandtricks-hq.com/development-center' ); ?>
+    	    </div>
+    	</div>
+        </div>
+        
+    </div> <!-- End page wrap -->
 
 	<h3><?php _e( 'Table Preview:', 'wp_csv_to_db' ); ?><input id="repop_table_ajax" name="repop_table_ajax" value="<?php _e( 'Reload Table Preview', 'wp_csv_to_db' ); ?>" type="button" style="margin-left:20px;" /></h3>
 
