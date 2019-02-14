@@ -107,31 +107,31 @@ class wp_csv_to_db {
 
 	if ( $getTable ) {
 	    $result		 = $wpdb->get_results( "SELECT * FROM $getTable" );
-	    $requestedTable	 = mysql_query( "SELECT * FROM " . $getTable );
+	    $requestedTable	 = $wpdb->get_results( "SHOW COLUMNS FROM " . $getTable );
 
-	    $fieldsCount = mysql_num_fields( $requestedTable );
+	    if ( ! $requestedTable ) {
+		//error occured
+	    }
 
-	    for ( $i = 0; $i < $fieldsCount; $i ++  ) {
-		$field		 = mysql_fetch_field( $requestedTable );
-		$field		 = (object) $field;
-		$getField	 .= $field->name . ',';
+	    $fieldsCount = count( $requestedTable );
+
+	    foreach ( $requestedTable as $column ) {
+		$getField .= $column->Field . ',';
 	    }
 
 	    $sub		 = substr_replace( $getField, '', -1 );
-	    $fields		 = $sub; // Get fields names
-	    $each_field	 = explode( ',', $sub );
+	    $fields		 = $sub . "\n"; // Get fields names
 	    $csv_file_name	 = $getTable . '_' . date( 'Ymd_His' ) . '.csv';
 
 	    // Get fields values with last comma excluded
 	    foreach ( $result as $row ) {
-		for ( $j = 0; $j < $fieldsCount; $j ++  ) {
-		    if ( $j == 0 )
-			$fields	 .= "\n"; // Force new line if loop complete
-		    $value	 = str_replace( array( "\n", "\n\r", "\r\n", "\r" ), "\t", $row->$each_field[ $j ] ); // Replace new line with tab
+		foreach ( $row as $data ) {
+		    $value	 = str_replace( array( "\n", "\n\r", "\r\n", "\r" ), "\t", $data ); // Replace new line with tab
 		    $value	 = str_getcsv( $value, ",", "\"", "\\" ); // SEQUENCING DATA IN CSV FORMAT, REQUIRED PHP >= 5.3.0
 		    $fields	 .= $value[ 0 ] . ','; // Separate fields with comma
 		}
-		$fields = substr_replace( $fields, '', -1 ); // Remove extra space at end of string
+		$fields	 = substr_replace( $fields, '', -1 ); // Remove extra space at end of string
+		$fields	 .= "\n"; // Force new line if loop complete
 	    }
 
 	    //header("Content-type: text/x-csv");
@@ -153,7 +153,7 @@ class wp_csv_to_db {
 	    wp_die( 'Error! Only site admin can perform this operation' );
 	}
 
-	// Set variables		
+	// Set variables
 	global $wpdb;
 	$error_message		 = '';
 	$success_message	 = '';
@@ -354,24 +354,26 @@ class wp_csv_to_db {
 			    <tr valign="top"><th scope="row"><?php _e( 'Select Database Table:', 'wp_csv_to_db' ); ?></th>
 				<td>
 				    <select id="table_select" name="table_select" value="">
-	                                <option name="" value=""></option>
+					<option name="" value=""></option>
 
-	<?php
-	// Get all db table names
-	global $wpdb;
-	$sql		 = "SHOW TABLES";
-	$results	 = $wpdb->get_results( $sql );
-	$repop_table	 = isset( $_POST[ 'table_select' ] ) ? $_POST[ 'table_select' ] : null;
+					<?php
+					// Get all db table names
+					global $wpdb;
+					$sql		 = "SHOW TABLES";
+					$results	 = $wpdb->get_results( $sql );
+					$repop_table	 = isset( $_POST[ 'table_select' ] ) ? $_POST[ 'table_select' ] : null;
 
-	foreach ( $results as $index => $value ) {
-	    foreach ( $value as $tableName ) {
-		?><option name="<?php echo $tableName ?>" value="<?php echo $tableName ?>" <?php if ( $repop_table === $tableName ) {
-				    echo 'selected="selected"';
-				} ?>><?php echo $tableName ?></option><?php
-					    }
-					}
-					?>
-	                            </select>
+					foreach ( $results as $index => $value ) {
+					    foreach ( $value as $tableName ) {
+						?><option name="<?php echo $tableName ?>" value="<?php echo $tableName ?>" <?php
+						if ( $repop_table === $tableName ) {
+						    echo 'selected="selected"';
+						}
+						?>><?php echo $tableName ?></option><?php
+						    }
+						}
+						?>
+				    </select>
 				</td> 
 			    </tr>
 			    <tr valign="top"><th scope="row"><?php _e( 'Select Input File:', 'wp_csv_to_db' ); ?></th>
@@ -383,8 +385,10 @@ class wp_csv_to_db {
 				    <input id="num_cols" name="num_cols" type="hidden" value="" />
 				    <input id="num_cols_csv_file" name="num_cols_csv_file" type="hidden" value="" />
 				    <br><?php _e( 'File must end with a .csv extension.', 'wp_csv_to_db' ); ?>
-				    <br><?php _e( 'Number of .csv file Columns:', 'wp_csv_to_db' );
-			    echo ' '; ?><span id="return_csv_col_count"><?php echo $repop_csv_cols; ?></span>
+				    <br><?php
+				    _e( 'Number of .csv file Columns:', 'wp_csv_to_db' );
+				    echo ' ';
+				    ?><span id="return_csv_col_count"><?php echo $repop_csv_cols; ?></span>
 				</td>
 			    </tr>
 			    <tr valign="top"><th scope="row"><?php _e( 'Select Starting Row:', 'wp_csv_to_db' ); ?></th>
@@ -480,7 +484,7 @@ class wp_csv_to_db {
 			<table class="form-table">
 			    <tr valign="top"><th scope="row"><?php _e( 'jQuery Theme', 'wp_csv_to_db' ); ?></th>
 				<td>
-					<!-- <input type="text" name="<?php //echo $this->option_name ?>[jq_theme]" value="<?php //echo $options['jq_theme'];  ?>" /> -->
+					<!-- <input type="text" name="<?php //echo $this->option_name          ?>[jq_theme]" value="<?php //echo $options['jq_theme'];           ?>" /> -->
 				    <select name="<?php echo $this->option_name ?>[jq_theme]"/>
 				    <?php
 				    $jquery_themes	 = array( 'base', 'black-tie', 'blitzer', 'cupertino', 'dark-hive', 'dot-luv', 'eggplant', 'excite-bike', 'flick', 'hot-sneaks', 'humanity', 'le-frog', 'mint-choc', 'overcast', 'pepper-grinder', 'redmond', 'smoothness', 'south-street', 'start', 'sunny', 'swanky-purse', 'trontastic', 'ui-darkness', 'ui-lightness', 'vader' );
