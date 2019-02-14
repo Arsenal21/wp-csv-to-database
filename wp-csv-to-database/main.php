@@ -110,7 +110,8 @@ class wp_csv_to_db {
 	    $requestedTable	 = $wpdb->get_results( "SHOW COLUMNS FROM " . $getTable );
 
 	    if ( ! $requestedTable ) {
-		//error occured
+		//error occurred
+		wp_die( "Can't get datanase columns info." );
 	    }
 
 	    $fieldsCount = count( $requestedTable );
@@ -484,7 +485,6 @@ class wp_csv_to_db {
 			<table class="form-table">
 			    <tr valign="top"><th scope="row"><?php _e( 'jQuery Theme', 'wp_csv_to_db' ); ?></th>
 				<td>
-					<!-- <input type="text" name="<?php //echo $this->option_name          ?>[jq_theme]" value="<?php //echo $options['jq_theme'];           ?>" /> -->
 				    <select name="<?php echo $this->option_name ?>[jq_theme]"/>
 				    <?php
 				    $jquery_themes	 = array( 'base', 'black-tie', 'blitzer', 'cupertino', 'dark-hive', 'dot-luv', 'eggplant', 'excite-bike', 'flick', 'hot-sneaks', 'humanity', 'le-frog', 'mint-choc', 'overcast', 'pepper-grinder', 'redmond', 'smoothness', 'south-street', 'start', 'sunny', 'swanky-purse', 'trontastic', 'ui-darkness', 'ui-lightness', 'vader' );
