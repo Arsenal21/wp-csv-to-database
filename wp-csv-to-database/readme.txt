@@ -3,7 +3,7 @@ Contributors: Tips and Tricks HQ, Ruhul Amin, josh401
 Donate link: https://www.tipsandtricks-hq.com/development-center
 Tags: csv, importer, spreadsheet, excel, import content, CSV File to WordPress Database, CSV to DB 
 Requires at least: 3.0
-Tested up to: 5.0
+Tested up to: 5.3
 Stable tag: 2.6
 License: GPLv2 or later
 
@@ -36,7 +36,9 @@ Access the plugin's UI in the WordPres dashboard under the "Settings -> WP CSV/D
 2. Can this plugin be used to dump data into any WordPress database table? Yes.
 
 == Screenshots ==
-Visit the plugin page at https://www.tipsandtricks-hq.com/?p=2116 for screenshots more info.
+Visit the following plugin page for screenshots and more info:
+
+https://www.tipsandtricks-hq.com/wp-csv-to-database-plugin-import-excel-file-content-into-wordpress-database-2116
 
 == Changelog ==
 
